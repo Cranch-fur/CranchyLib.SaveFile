@@ -73,13 +73,19 @@ namespace CranchyLib.SaveFile
         public static string Ressurect_UID(string input, string steamtoken)
         {
             dynamic JsSaveFile = JsonConvert.DeserializeObject(input);
-            JsSaveFile["playerUId"] = SteamAuthToken_toUID(steamtoken);
+            if (steamtoken.Length == 16) // 16 Symbols - Length of the playerUID, so DLL just use it instead of manipulations with SteamToken
+                JsSaveFile["playerUId"] = steamtoken;
+            else JsSaveFile["playerUId"] = SteamAuthToken_toUID(steamtoken);
+
             return JsonConvert.SerializeObject(JsSaveFile, Formatting.None);
         }
         public static string Ressurect_All(string input, string steamtoken)
         {
             dynamic JsSaveFile = JsonConvert.DeserializeObject(input);
-            JsSaveFile["playerUId"] = SteamAuthToken_toUID(steamtoken);
+            if(steamtoken.Length == 16) // 16 Symbols - Length of the playerUID, so DLL just use it instead of manipulations with SteamToken
+                JsSaveFile["playerUId"] = steamtoken;
+            else JsSaveFile["playerUId"] = SteamAuthToken_toUID(steamtoken);
+
             JsSaveFile["currentSeasonTicks"] = (long)((DateTime.Now.ToUniversalTime() - NETTimeStampStart).TotalMilliseconds + 0.5);
             return JsonConvert.SerializeObject(JsSaveFile, Formatting.None);
         }
